@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bymt4htj6q5qu"]
+
+[ext_resource type="PackedScene" uid="uid://cepkhndhaqora" path="res://scenes/World.tscn" id="1_ly5ip"]
+
+[node name="Main" type="Node"]
+
+[node name="Ground" parent="." instance=ExtResource("1_ly5ip")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, -1.74393e-16, 3.02058e-16, 7.81753e-17, 0.95606, 0.293173, -3.39913e-16, -0.293173, 0.95606, 2.08165e-12, 2.08165e-12, 2.08165e-12)

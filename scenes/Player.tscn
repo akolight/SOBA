@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://smhtxls8bxcu"]
+
+[ext_resource type="Script" path="res://player/player.gd" id="1_n7lnf"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6yi0q"]
+albedo_color = Color(1, 0.392157, 0.796078, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_q2k3v"]
+material = SubResource("StandardMaterial3D_6yi0q")
+size = Vector3(1, 1, 0.5)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_y5hr8"]
+height = 0.502632
+
+[node name="Player" type="CharacterBody3D"]
+collision_mask = 2
+script = ExtResource("1_n7lnf")
+metadata/_edit_group_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 2.08165e-12, 0.25, 2.08165e-12)
+mesh = SubResource("PrismMesh_q2k3v")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.25, 2.08165e-12)
+shape = SubResource("CylinderShape3D_y5hr8")
