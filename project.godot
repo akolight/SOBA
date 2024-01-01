@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 PlayerPosition="*res://player/player_position.gd"
+MinionManager="*res://autoloads/minion_manager.gd"
 
 [display]
 
@@ -26,6 +27,10 @@ window/size/viewport_height=1080
 [layer_names]
 
 3d_physics/layer_1="player"
+
+[navigation]
+
+3d/default_cell_size=0.1
 
 [rendering]
 
