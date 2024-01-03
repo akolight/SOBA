@@ -1,11 +1,14 @@
-[gd_scene load_steps=21 format=3 uid="uid://cepkhndhaqora"]
+[gd_scene load_steps=24 format=3 uid="uid://cepkhndhaqora"]
 
 [ext_resource type="PackedScene" uid="uid://b0jrynh20hfig" path="res://scenes/blue_nexus.tscn" id="1_k4b5r"]
 [ext_resource type="PackedScene" uid="uid://smhtxls8bxcu" path="res://scenes/Player.tscn" id="1_q1lhd"]
 [ext_resource type="Script" path="res://BTS/PlayerCamera.gd" id="2_gg4tf"]
 [ext_resource type="PackedScene" uid="uid://cbkvtvtauenfk" path="res://scenes/red_nexus.tscn" id="4_glrf6"]
+[ext_resource type="Script" path="res://BTS/BlueMinionSpawn.gd" id="5_3debg"]
 [ext_resource type="PackedScene" uid="uid://cjgnrqw8vlwco" path="res://scenes/blue_melee_minion.tscn" id="5_4owv0"]
+[ext_resource type="Script" path="res://BTS/RedMinionSpawn.gd" id="7_2bg6s"]
 [ext_resource type="Script" path="res://BTS/Utils.gd" id="7_136bj"]
+[ext_resource type="PackedScene" uid="uid://dij05annll2qx" path="res://scenes/red_melee_minion.tscn" id="8_0ub13"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oagq8"]
 albedo_color = Color(0.411765, 0.619608, 0.407843, 1)
@@ -247,15 +250,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 2.08165e-12, -40)
 
 [node name="BlueMinionSpawn" type="Node3D" parent="MinionSpawn"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37, 2.08165e-12, 37)
-
-[node name="BlueMeleeMinion" parent="MinionSpawn/BlueMinionSpawn" instance=ExtResource("5_4owv0")]
+script = ExtResource("5_3debg")
+blue_melee_minion = ExtResource("5_4owv0")
 
 [node name="RedMinionSpawn" type="Node3D" parent="MinionSpawn"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37, 2.08165e-12, -37)
+script = ExtResource("7_2bg6s")
+red_melee_minion = ExtResource("8_0ub13")
 
 [node name="WaveTimer" type="Timer" parent="MinionSpawn"]
 
 [node name="GapTimer" type="Timer" parent="MinionSpawn"]
+wait_time = 15.0
+one_shot = true
+autostart = true
 
 [node name="Utils" type="Control" parent="."]
 layout_mode = 3
@@ -268,18 +276,24 @@ script = ExtResource("7_136bj")
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
+text = "wave timer"
 
 [node name="GapTimerLbl" type="Label" parent="Utils"]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_top = 46.0
+offset_right = 75.0
+offset_bottom = 69.0
+text = "gap timer"
 
 [node name="MinionGoal" type="Label" parent="Utils"]
 layout_mode = 0
 offset_top = 23.0
 offset_right = 40.0
 offset_bottom = 46.0
+text = "minion count"
 
 [connection signal="input_event" from="StaticBody3D" to="Player" method="_on_static_body_3d_input_event"]
 [connection signal="timeout" from="MinionSpawn/WaveTimer" to="MinionSpawn/BlueMinionSpawn" method="_on_wave_timer_timeout"]
+[connection signal="timeout" from="MinionSpawn/WaveTimer" to="MinionSpawn/RedMinionSpawn" method="_on_wave_timer_timeout"]
 [connection signal="timeout" from="MinionSpawn/GapTimer" to="MinionSpawn/BlueMinionSpawn" method="_on_gap_timer_timeout"]
+[connection signal="timeout" from="MinionSpawn/GapTimer" to="MinionSpawn/RedMinionSpawn" method="_on_gap_timer_timeout"]

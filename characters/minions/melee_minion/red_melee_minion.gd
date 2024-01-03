@@ -1,9 +1,9 @@
 extends CharacterBody3D
 
 @export var movement_speed: float = 5.0
-var movement_target_position: Vector3 = Vector3(37.0,0.0,-37.0)
+var movement_target_position: Vector3 = Vector3(-37.0,0.0,37.0)
 
-@onready var navigation_agent: NavigationAgent3D = $MinionNavAgent
+@onready var navigation_agent: NavigationAgent3D = $BlueMinionNavAgent
 
 func _ready():
 	# These values need to be adjusted for the actor's speed

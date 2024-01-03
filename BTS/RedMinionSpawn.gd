@@ -1,6 +1,6 @@
 extends Node3D
 
-@export var blue_melee_minion: PackedScene
+@export var red_melee_minion: PackedScene
 
 var minion_count = 0
 var wave_size = 2
@@ -13,9 +13,9 @@ func _ready():
 func _on_wave_timer_timeout():
 	if minion_count < wave_size:
 		minion_count += 1
-		MinionManager.blue_minion_count += 1
+		MinionManager.red_minion_count += 1
 			# Create a new instance of the minion scene
-		var minion = blue_melee_minion.instantiate()
+		var minion = red_melee_minion.instantiate()
 	
 		var minion_spawn_location = self.global_position
 		add_child(minion)
@@ -23,7 +23,7 @@ func _on_wave_timer_timeout():
 		$"../WaveTimer".stop()
 		$"../GapTimer".start()
 		minion_count = 0
-		MinionManager.blue_minion_count = 0
+		MinionManager.red_minion_count = 0
 
 
 
@@ -32,7 +32,7 @@ func _on_gap_timer_timeout():
 	# and starts the timer for the next wave
 	if minion_count < wave_size:
 		$"../WaveTimer".start()
-		var minion = blue_melee_minion.instantiate()
+		var minion = red_melee_minion.instantiate()
 		var minion_spawn_location = self.global_position
 		add_child(minion)
 	else:
