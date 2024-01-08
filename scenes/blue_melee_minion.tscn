@@ -1,25 +1,66 @@
-[gd_scene load_steps=5 format=3 uid="uid://cjgnrqw8vlwco"]
+[gd_scene load_steps=9 format=3 uid="uid://cjgnrqw8vlwco"]
 
 [ext_resource type="Script" path="res://characters/minions/melee_minion/blue_melee_minion.gd" id="1_no8jj"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kb0l1"]
-albedo_color = Color(0, 0.572549, 1, 1)
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_6xvx3"]
-material = SubResource("StandardMaterial3D_kb0l1")
+[ext_resource type="PackedScene" uid="uid://7gijcsngrx6v" path="res://models/Placeholder_guy.glb" id="2_7tu20"]
+[ext_resource type="Script" path="res://FSM/finite_state_machine.gd" id="3_msacp"]
+[ext_resource type="Script" path="res://FSM/minion_path_state.gd" id="4_e7rdf"]
+[ext_resource type="Script" path="res://FSM/minion_chase_state.gd" id="5_qh4mk"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2e32m"]
 
-[node name="BlueMeleeMinion" type="CharacterBody3D"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_o15nb"]
+height = 5.0
+radius = 5.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_vittf"]
+radius = 2.0
+
+[node name="BlueMeleeMinion" type="CharacterBody3D" groups=["blue", "minion"]]
+collision_layer = 8
+collision_mask = 265
 script = ExtResource("1_no8jj")
 metadata/_edit_group_ = true
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
-mesh = SubResource("CapsuleMesh_6xvx3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
 shape = SubResource("CapsuleShape3D_2e32m")
 
 [node name="MinionNavAgent" type="NavigationAgent3D" parent="."]
+target_desired_distance = 5.0
+
+[node name="VisionRange" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 257
+
+[node name="VisionCollision" type="CollisionShape3D" parent="VisionRange"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.5, 2.08165e-12)
+shape = SubResource("CylinderShape3D_o15nb")
+
+[node name="SpacingRange" type="Area3D" parent="."]
+
+[node name="SpacingCollision" type="CollisionShape3D" parent="SpacingRange"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
+shape = SubResource("CylinderShape3D_vittf")
+
+[node name="Placeholder_guy" parent="." instance=ExtResource("2_7tu20")]
+transform = Transform3D(-0.25, 0, 2.18557e-08, 0, 0.25, 0, -2.18557e-08, 0, -0.25, 0, 0, 0)
+
+[node name="FiniteStateMachine" type="Node" parent="." node_paths=PackedStringArray("state")]
+script = ExtResource("3_msacp")
+state = NodePath("MinionPathState")
+
+[node name="MinionPathState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor", "nav_agent", "vision_area")]
+script = ExtResource("4_e7rdf")
+actor = NodePath("../..")
+nav_agent = NodePath("../../MinionNavAgent")
+vision_area = NodePath("../../VisionRange")
+
+[node name="MinionChaseState" type="Node" parent="FiniteStateMachine" node_paths=PackedStringArray("actor", "nav_agent", "vision_area")]
+script = ExtResource("5_qh4mk")
+actor = NodePath("../..")
+nav_agent = NodePath("../../MinionNavAgent")
+vision_area = NodePath("../../VisionRange")
+
+[connection signal="body_entered" from="VisionRange" to="FiniteStateMachine/MinionPathState" method="_on_vision_range_body_entered"]
+[connection signal="body_exited" from="VisionRange" to="FiniteStateMachine/MinionChaseState" method="_on_vision_range_body_exited"]
+[connection signal="found_target" from="FiniteStateMachine/MinionPathState" to="FiniteStateMachine/MinionChaseState" method="_on_minion_path_state_found_target"]

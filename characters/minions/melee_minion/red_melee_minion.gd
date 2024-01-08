@@ -34,3 +34,11 @@ func _physics_process(delta):
 	
 	velocity = current_agent_position.direction_to(next_path_position) * movement_speed
 	move_and_slide()
+
+
+func _on_vision_range_body_entered(body):
+	if body.is_in_group("player") and body.is_in_group("blue"):
+		print("ahh")
+	if body.is_in_group("minion") and body.is_in_group("blue"):
+		navigation_agent.set_target_position(self.global_position)
+

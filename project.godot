@@ -27,6 +27,8 @@ window/size/viewport_height=1080
 [layer_names]
 
 3d_physics/layer_1="player"
+3d_physics/layer_4="blue_minion"
+3d_physics/layer_9="red_minion"
 
 [navigation]
 

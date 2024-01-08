@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://cepkhndhaqora"]
+[gd_scene load_steps=23 format=3 uid="uid://cepkhndhaqora"]
 
 [ext_resource type="PackedScene" uid="uid://b0jrynh20hfig" path="res://scenes/blue_nexus.tscn" id="1_k4b5r"]
 [ext_resource type="PackedScene" uid="uid://smhtxls8bxcu" path="res://scenes/Player.tscn" id="1_q1lhd"]
@@ -8,7 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://cjgnrqw8vlwco" path="res://scenes/blue_melee_minion.tscn" id="5_4owv0"]
 [ext_resource type="Script" path="res://BTS/RedMinionSpawn.gd" id="7_2bg6s"]
 [ext_resource type="Script" path="res://BTS/Utils.gd" id="7_136bj"]
-[ext_resource type="PackedScene" uid="uid://dij05annll2qx" path="res://scenes/red_melee_minion.tscn" id="8_0ub13"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oagq8"]
 albedo_color = Color(0.411765, 0.619608, 0.407843, 1)
@@ -72,7 +71,7 @@ height = 3.0
 
 [node name="Ground" type="Node3D"]
 
-[node name="BlueNexus" parent="." instance=ExtResource("1_k4b5r")]
+[node name="BlueNexus" parent="." groups=["blue"] instance=ExtResource("1_k4b5r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, 40)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
@@ -243,7 +242,7 @@ mesh = SubResource("CylinderMesh_jfj7i")
 transform = Transform3D(1, -6.50845e-16, 1.74393e-16, 1.74393e-16, 0.5, 0.866025, -6.50845e-16, -0.866025, 0.5, 2.08165e-12, 10, 5)
 script = ExtResource("2_gg4tf")
 
-[node name="RedNexus" parent="." instance=ExtResource("4_glrf6")]
+[node name="RedNexus" parent="." groups=["red"] instance=ExtResource("4_glrf6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 2.08165e-12, -40)
 
 [node name="MinionSpawn" type="Node3D" parent="."]
@@ -256,12 +255,11 @@ blue_melee_minion = ExtResource("5_4owv0")
 [node name="RedMinionSpawn" type="Node3D" parent="MinionSpawn"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37, 2.08165e-12, -37)
 script = ExtResource("7_2bg6s")
-red_melee_minion = ExtResource("8_0ub13")
 
 [node name="WaveTimer" type="Timer" parent="MinionSpawn"]
 
 [node name="GapTimer" type="Timer" parent="MinionSpawn"]
-wait_time = 15.0
+wait_time = 5.0
 one_shot = true
 autostart = true
 
@@ -274,8 +272,9 @@ script = ExtResource("7_136bj")
 
 [node name="WaveTimerLbl" type="Label" parent="Utils"]
 layout_mode = 0
-offset_right = 40.0
+offset_right = 87.0
 offset_bottom = 23.0
+pivot_offset = Vector2(50, 2.08165e-12)
 text = "wave timer"
 
 [node name="GapTimerLbl" type="Label" parent="Utils"]

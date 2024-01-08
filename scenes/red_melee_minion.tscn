@@ -1,25 +1,44 @@
-[gd_scene load_steps=5 format=3 uid="uid://dij05annll2qx"]
+[gd_scene load_steps=6 format=3 uid="uid://dij05annll2qx"]
 
 [ext_resource type="Script" path="res://characters/minions/melee_minion/red_melee_minion.gd" id="1_7p1uo"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kb0l1"]
-albedo_color = Color(0.870588, 0.282353, 0.294118, 1)
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_6xvx3"]
-material = SubResource("StandardMaterial3D_kb0l1")
+[ext_resource type="PackedScene" uid="uid://7gijcsngrx6v" path="res://models/Placeholder_guy.glb" id="2_4tl2m"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2e32m"]
 
-[node name="RedMeleeMinion" type="CharacterBody3D"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_hkyh1"]
+height = 5.0
+radius = 5.0
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_g8typ"]
+radius = 2.0
+
+[node name="RedMeleeMinion" type="CharacterBody3D" groups=["minion", "red"]]
+collision_layer = 256
+collision_mask = 265
 script = ExtResource("1_7p1uo")
 metadata/_edit_group_ = true
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
-mesh = SubResource("CapsuleMesh_6xvx3")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
 shape = SubResource("CapsuleShape3D_2e32m")
 
 [node name="BlueMinionNavAgent" type="NavigationAgent3D" parent="."]
+
+[node name="Placeholder_guy" parent="." instance=ExtResource("2_4tl2m")]
+transform = Transform3D(-0.25, 8.71967e-17, -2.18557e-08, 8.71967e-17, 0.25, -8.71967e-17, 2.18557e-08, -8.71967e-17, -0.25, 0, 0, 0)
+
+[node name="VisionRange" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 257
+
+[node name="VisionCollision" type="CollisionShape3D" parent="VisionRange"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.5, 2.08165e-12)
+shape = SubResource("CylinderShape3D_hkyh1")
+
+[node name="SpacingRange" type="Area3D" parent="."]
+
+[node name="SpacingCollision" type="CollisionShape3D" parent="SpacingRange"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 1, 2.08165e-12)
+shape = SubResource("CylinderShape3D_g8typ")
+
+[connection signal="body_entered" from="VisionRange" to="." method="_on_vision_range_body_entered"]
